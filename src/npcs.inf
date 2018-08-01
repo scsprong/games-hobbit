@@ -1,0 +1,286 @@
+! "Hobbit" npc's
+
+Class NPC
+has animate
+with
+    life [;
+!        Answer, Ask, Order, Tell:
+!"Just use T[ALK] [TO ", (the) self, "].";
+    ],
+;
+
+! Elrond always offers food if you talk to him and have no lunch with you.
+! He snatches it away from you if you leave without having eaten it.
+! The snatching is done in the Rivendell room.
+[ may_give_lunch
+    ;
+    if (player ~= parent(lunch)) {
+        move lunch to player;
+"Elrond hesitatingly offers you some food.
+He gives your fairly thick legs a greedy look.";
+    } else {
+"Elrond laughs at your silly question. He pats your head.";
+    }
+];
+
+NPC elrond
+"Elrond"
+rivendell
+has male proper
+with
+    name 'elf' 'elrond' 'nasty',
+    description
+"Elrond has turned pretty nasty lately.
+Better not mess with him, considering his plans to enslave all Hobbits.",
+    initial
+"Elrond is sitting at a round table together with his generals,
+discussing his plans for a coming conquest and enslavement of the Hobbits.",
+    life [;
+        Ask:
+            switch (second) {
+
+            'chart', 'map':
+                if (player == parent(map)) {
+"~That's a fine map you've got there.
+We wouldn't want anything to HAPPEN to it, now would we?~, Elrond hisses.
+He continues; ~Whatever you do, don't show it to that crazy dwarf!~.";
+                } else {
+"~What map are you talking about, you little prat?
+You must be delirious!~, Elrond snarls.
+He slaps you in the face.";
+                }
+
+            'food', 'lunch':
+                may_give_lunch();
+                return;
+
+            'plan', 'plans', 'enslavement', 'slave':
+"~They are top secret.
+If you reveal anything you're dead meat, pipsqueak!~, Elrond whispers.
+He look as though he meant it.";
+
+            default:
+"Elrond laughs at your silly question. He pats your head.";
+
+        } ! switch
+        may_give_lunch();
+        return;
+    ],
+;!
+
+
+NPC gandalf
+"Gandalf"
+home
+has male open proper transparent
+with
+    name 'gandalf' 'grey' 'magician' 'wizard',
+    description
+"Gandalf, the old magician, is still working with his new spell.",
+    initial
+"Gandalf is working on a nasty spell.",
+    life [;
+        Ask:
+            switch (second) {
+
+            'chart', 'map':
+                if (self == parent(map)) {
+                    move map to player;
+"~Oh, that map.
+There is absolutely nothing special about it at all.
+I guess you could have it, if you want it.~, Gandalf declares and
+hands you the map.";
+                } else {
+"Gandalf yells, ~I already gave it to you, didn't I!!!~.";
+                }
+
+            'hoboff':
+"Gandalf gives you a mean smile, showing all his teeth.
+~Any Hobbit of my choice will be turned into a pile of dirt.~, he laughs,
+~Only a few minor adjustments left, and it will produce a great fertilizer.~.
+His eyes open wide as he reaches the end of the sentence.
+He then looks at you for a good fifteen seconds before he slowly turns away.";
+
+            'spell':
+"~This will be a great spell.
+I shall name it 'HOBOFF', no doubt.~, Gandalf chuckles.";
+
+            'thorin', 'dwarf':
+"~It's a sordid story, really.
+He hasn't been himself in a long time.
+Or perhaps he wasn't himself before, and now he is.
+Or maybe we haven't even seen his real self.
+Let's talk about something else, shall we?~ says Gandalf and looks tired.";
+
+            default:
+"~Yes, that's probably so~, he says.";
+
+        }
+    ],
+;!
+
+
+! if not see! Smaug is not around, as far as I can see.
+NPC smaug
+"Smaug the Dragon"
+den
+has male proper transparent
+with
+    name 'dragon' 'monster' 'reptile' 'smaug',
+    description
+"Smaug's red dragon body is filling the eastern part of the cave.
+As he can't get out of the cave anymore, he seems to have settled with just
+lying here, eating any adventurers that drop by.
+Every now and then he enjoys a big cigar, but he obviously doesn't know
+quite how to do it right.
+The cigar in his mouth hasn't been cut properly.
+Smaug coughs, but luckily you're out of the deadly range.",
+    initial
+"Smaug is lying on a big heap of silver bars, smoking a huge cigar.
+He looks at you and yawns loudly.",
+    life [;
+        Answer, Ask, Order, Tell:
+"He looks at you and yawns loudly.";
+    ],
+;!
+
+
+!! Thorin the psychoactive dwarf
+!
+[ location_dependent_answer
+    ;
+    switch (location) { 
+        clearing:
+"Thorin gets a serious look on his face.
+~Don't push your luck, kid!~, he says.";
+
+        den:
+"~Hell, this is a fortune!~, Thorin states as he walks around the cave.";
+
+        foul_cave:
+"There's a naked dwarf woman here, what do you expect?";
+
+        home:
+"~Did your mom ever talk to you about death?~, Thorin asks you.";
+
+        rivendell:
+"Thorin is too absorbed by Elrond's plans to pay attention.";
+
+        troll_cave:
+"~I'm tired of killing for money. Let's go home!!, Thorin sighs.";
+
+        woods:
+"~Have you ever tried picking up your teeth with broken fingers?~,
+Thorin replies.";
+
+        default:
+"Thorin ignores you.";
+    }
+];
+
+!
+[ dont_mention_the_map
+    ;
+    if (player == parent(map)) {
+        print
+"Thorin takes a quick look at the map.
+His eyes widen in rage as he reaches for his battle axe.
+~It was you all the time, wasn't it?!~, he cries out.
+With one well placed blow he cleaves your skull. All is dark...";
+        deadflag = 1;
+    } else {
+        print
+"Thorin eyes you suspiciously.
+~Don't try any tricks, boy.
+We both know that there is no map here, now don't we?~, he asks.;
+He doesn't seem too sure about it himself.";
+    }
+];
+
+
+NPC thorin
+"Thorin the Dwarf"
+home
+has male proper
+with
+    name 'dwarf' 'thorin',
+    description
+"Thorin, your old friend, is no longer the proud dwarf he once was.
+All the drugs have turned him into a drooling good-for-nothing idiot.
+The only reason that he has come along is to get more treasures for
+drugs, as always.",
+    life [;
+        Ask:
+            switch (second) {
+            ! Use print to avoid double newline in caller.
+            'chart', 'map':
+                dont_mention_the_map();
+
+            'naked', 'woman':
+                if (location == foul_cave) {
+                    print
+"Thorin looks embarrased.
+~I'd rather not talk about it.
+She's...She's...Never mind, it's none of your business anyway,~ he says.
+He briefly touches the handle of his axe, as if to make it clear that you
+had better leave it at that.";
+                } else {
+                    print
+"Thorin glances around.
+~Whoa, where is she?
+Where's this woman you're talking about?~ he says.
+You are forced to disappoint him.";
+                }
+
+            default:
+                ! XXX Inform6 can't handle nested switches?
+                ! bypassing "There is no reply."
+                location_dependent_answer();
+                return;
+            } ! talk switch
+
+        Show:
+            switch (second) {
+            ! Use print to avoid double newline in caller.
+            'chart', 'map':
+                dont_mention_the_map();
+            }
+    ],
+;!
+
+
+NPC woman
+"Naked Dwarf Woman"
+foul_cave
+has female
+with
+    name 'naked' 'woman',
+    description
+"She looks cold and tired, and pretty far from sensual.
+As you peek at her, Thorin remarks that she's the only dwarf woman alive
+at the moment.
+He seems to find her attractive.",
+    life [;
+        Ask:
+            switch (second) {
+
+            'map':
+                if (player == parent(map)) {
+"She looks at your map and laughs heartily.
+You seem to have made her day.";
+                } else {
+"She doesn't seem to understand what you are referring to.";
+                }
+
+            'thorin':
+"She says something that sounds like an insult.
+Since the two of you don't seem to have any language in common, you can't
+tell for sure though.
+She pats Thorin's head.
+Thorin slaps you.";
+
+            default:
+"She shudders and looks nervous.";
+        }
+    ],
+;!

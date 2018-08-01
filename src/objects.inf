@@ -1,0 +1,112 @@
+! "Hobbit" notable objects
+
+! Instead of creating and destroying lunches, we pass one lunch around
+! between Elrond and the player.
+Object lunch
+"lunch"
+elrond ! where
+has edible
+with
+    ! use these referrals
+    name 'food' 'lunch',
+    description
+"It's edible.",
+! Standard verb Eat 'removes' the object. We simply give it back to Elrond.
+    after [;
+        Eat:
+            move lunch to elrond;
+"You feel much refreshed.";
+    ],
+;!
+
+
+Object map
+"Rivendell Map"
+gandalf ! Initially carried by Gandalf.
+has proper supporter
+with
+    ! use these referrals
+    name 'chart' 'map',
+    description
+"The curious map must obviously have been drawn by hand, at great effort. 
+It shows the mysterious surroundings of Rivendell, home of the elves.",
+
+    before [;
+        Examine:
+            if (gandalf == parent(self)) {
+"Gandalf has it.
+You should ask him about it.
+Maybe he doesn't need it anyway.";
+            } else {
+                ! Otherwise the player has it.
+"The curious map must obviously have been drawn by hand, at great effort. 
+It shows the mysterious surroundings of Rivendell, home of the elves.";
+            }
+    ],
+;!
+
+
+Object sword
+"sword"
+troll_cave ! where
+has clothing
+with
+    name 'sword' 'weapon',
+    description
+"There is nothing special about the sword.",
+
+    before [;
+        Attack:
+"Violence is not very likely to solve your problems. Better stay calm.";
+
+        Cut:
+            ! XXX
+            !if (location == den && second == den_cigar) {
+            if (location == den && second == 'cigar') {
+            !if (location == den && noun == 'cigar') {
+                ! cut Smaug's cigar and win the game
+                    print
+"You run towards the mighty dragon and cut off his cigar.
+The dragon exclaims, ~Hey, what are you doing!~.
+You explain that the cigar will be easier to smoke now, and after some
+experimenting, Smaug agrees with you.
+He trades your sword for a treasure and offers you transport to Rivendell.";
+                ! remove sword
+                move sword to smaug;
+                ! give treasure if the player hasn't already taken it.
+                if (player ~= parent(treasure)) {
+                    move treasure to player;
+                }
+                ! set location to Rivendell
+                PlayerTo(rivendell);
+                !deadflag = 2; XXX of pas thuis
+            } else {
+"Violence is not very likely to solve your problems. Better stay calm.";
+            }
+    ],
+;!
+
+
+Object torch
+"torch"
+home_chest ! where
+has light
+with
+    ! use these referrals
+    name 'flame' 'torch',
+    description
+"It is currently providing light.",
+;!
+
+
+Object treasure
+"treasure"
+den ! Given by Smaug.
+has
+with
+    name 'gems' 'gold' 'jewelry' 'loot' 'treasure',
+    description
+"It is just the kind of treasure you'd expect to find in a dragon's den.
+It does seem mighty valuable.",
+;!
+

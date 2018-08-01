@@ -1,0 +1,51 @@
+!!% -SD
+! Place compiler switches after !%
+
+Constant Story = 
+"Hobbit - The True Story - redux, Director's Cut.";
+
+Constant Headline = 
+"^
+An MS-DOS adventure released by Milbus Software(tm) 1993.^
+redux, Director's Cut released by Milbus Software (tm) 2001.^
+Inform port by S.C.Sprong 20091204.^^";
+
+! Standard include
+Include "Parser";
+Include "VerbLib";
+
+! External files. Inform6 can't handle forward references.
+Include "rooms.inf";
+Include "npcs.inf";
+Include "objects.inf";
+
+! Main entry
+[Initialise;
+    location = home;
+];
+
+!
+Include "GrammarEN";
+
+! Additional verbs & synonyms
+Verb 'talk'
+    * 'about' noun -> Ask
+    * 'at' noun -> Ask
+;
+
+
+[ HintSub;
+    if (location == home && gandalf == parent(map)) {
+"Gandalf has a map.
+You should ask him about it.
+Maybe he doesn't need it anyway.";
+    } else if (location == clearing) {
+"Trolls are not known to stand sunlight very well.
+It may be wise to wait a while before confronting them.";
+    } else {
+"Try examining things!";
+    }
+];
+Verb 'clue' 'help' 'hint'
+    *   -> Hint;
+!

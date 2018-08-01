@@ -1,0 +1,358 @@
+! "Hobbit" room descriptions
+
+!
+[ move_thorin
+    new_loc;
+    ! Suppress redundant message, e.g. at the start
+    if (new_loc == parent(thorin)) {
+        return;
+    }
+    ! else ...
+    move thorin to new_loc;
+    switch (new_loc) {
+
+    den:
+        print
+"^Thorin, whom you haven't seen since you were in the forest together,
+enters from a side door, singing about peace.
+He greets you with a laugh.^";
+
+    rivendell:
+        print
+"^Thorin announces: ~If you're attacking the Hobbits, count me in!~^";
+
+    troll_cave:
+        print
+"^Thorin is mumbling to himself and fails to notice your presence.^";
+
+    woods:
+        print
+"^Thorin sits down and starts singing about drugs. He offers you a joint.^";
+
+    }
+];
+
+Class Room 
+has light
+with
+    after [;
+        ! Voor of na 'you can't go that way?'
+        Go:
+            switch(noun) {
+            n_obj:
+                print
+"Thorin is already here.";
+
+            e_obj:
+                print
+"Thorin enters from the west.";
+
+            s_obj:
+                print
+"Thorin comes running after you.";
+
+            w_obj:
+                print
+"Thorin follows your trail.";
+            }
+
+    ],
+    !description [;
+    ! Als dit voor of in plaats van initial string gebeurt: zet dit in
+    ! elke room initial.
+    ! en pas op met print en "string" wat een impliciete print_ret is
+    !    move_thorin(self);
+    !],
+;!
+
+
+Room clearing
+"Troll's Clearing"
+with
+    n_to [;
+        if (trolls.stoned) {
+                !! XXX Totdat we override vs append begrijpen.
+                print
+"Thorin is already here.";
+            PlayerTo(troll_cave);
+        } else {
+"The trolls won't let you";
+        }
+    ],
+    e_to rivendell,
+    w_to home,
+    ! ignore these referrals
+    name 'brick' 'vast' 'yellow',
+    description [;
+        print
+"You are standing in a vast clearing, with paths leading off to the east
+and west.
+A yellow brick road leads north.";
+        return move_thorin(self);
+    ],
+    after [;
+        Wait:
+            trolls.stoned = true;
+"A new day dawns.
+The trolls seem rather surprised, and rigid with fear.";
+    ],
+;!
+
+
+Object trolls
+"Trolls"
+clearing
+has static
+with
+    ! use these referrals
+    name 'trolls//p',
+    stoned false,
+    description [;
+        if (self.stoned) {
+"The trolls seem to be stoned.
+They probably don't like the sunlight.";
+        } else {
+"The trolls are chanting ancient rhymes.
+They tend to do that just before dawn.";
+        }
+    ],
+    initial [;
+        print
+"Trolls are standing all around you, fiercely watching every move of your
+limbs.";
+    ],
+;!
+
+
+! You can only leave if you have the sword with you and cut the cigar!
+Room den
+"Smaug's Den"
+with
+! ignore these referrals
+    name 'great',
+    description [;
+        print
+"You are in a great cave.
+Gold and jewelry cover the floor.
+Precious paintings are hanging on all the walls.";
+        return move_thorin(self);
+    ],
+;!
+
+
+Object den_paintings
+"paintings"
+den
+has pluralname scenery
+with
+    name 'art' 'paintings//p' 'precious' 'walls',
+    description
+"Among the paintings you recognize works of Picasso, da Vinci
+and Rembrandt.",
+;!
+
+
+Object den_cigar
+"cigar"
+den ! smaug ! where
+has scenery
+with
+    ! use these referrals
+    name 'cigar' 'smoke' 'stogie',
+    description
+"The cigar doesn't seem to be properly cut.",
+    before [;
+    ! XXX Hoort dit bij sword of bij cigar?
+        Cut:
+            ! cut Smaug's cigar and win the game
+                print
+"You run towards the mighty dragon and cut off his cigar.
+The dragon exclaims, ~Hey, what are you doing!~.
+You explain that the cigar will be easier to smoke now, and after some
+experimenting, Smaug agrees with you.
+He trades your sword for a treasure and offers you transport to Rivendell.";
+                ! remove sword
+                move sword to smaug;
+                ! give treasure if the player hasn't already taken it.
+                if (player ~= parent(treasure)) {
+                    move treasure to player;
+                }
+                ! set location to Rivendell
+                PlayerTo(rivendell);
+                !deadflag = 2; XXX of pas thuis
+    ],
+
+;!
+
+
+Room foul_cave
+"Foul Smelling Cave"
+with
+    e_to woods,
+    ! ignore these referrals
+    name 'foul' 'smell' 'vast',
+    description [;
+        print
+"You are in a vast cave, with a foul smell filling your nostrils.
+Light is coming in through the wide entrance to the east, and it's just
+enough for you to make out the walls of the cave.";
+        return move_thorin(self);
+    ],
+;!
+
+
+Room home
+"Tunnel Like Hall"
+with
+    e_to clearing,
+    ! ignore these referrals
+    name 'hall' 'hole' 'home',
+    description [;
+        print
+"You are in your comfortable tunnel like hall.
+In fact, it's just a dirty hole in the ground, but to you it's home.
+There is a round, green door set in the eastern wall.";
+        return move_thorin(self);
+    ],
+    each_turn [;
+        if (player == parent(treasure)) {
+            print
+"As you enter your home again, Gandalf leaps to his feet.
+He comes forward, as if to greet and congratulate you, but instead he asks,
+~Did you bring any tobacco?~.
+You decide to do what you should have done a long time ago.
+You show the old wizard to the door, and kindly ask him to leave.
+Thorin follows Gandalf out through the door.^
+Without any wizards or dwarves pestering you all the time, your life gets
+very pleasant, and with the treasure it stays that way.^
+You have won!!!";
+            deadflag = 2;
+        }
+    ],
+;!
+
+
+Object home_chest
+"Wooden Chest"
+home
+has container ~open openable static
+with
+    name 'chest' 'trunk',
+    description
+"It's a nice piece of wooden workmanship.",
+! Keuze of niet?
+! "There's a burning torch inside it. You decide to pick it up. "
+;!
+
+Object home_spell
+"spell"
+home
+has scenery
+with
+    name 'nasty' 'paper' 'spell' 'yellow',
+    description
+"It's a piece of beautiful yellowed paper, with magical symbols arranged
+in groups.
+Several symbols resemble Hobbits exploding.",
+;!
+
+
+!! Rivendell, where they are Indian givers.
+[ hold_back_lunch
+    ;
+    if (player == parent(lunch)) {
+        move lunch to elrond;
+"Just as you leave, Elrond grabs your lunch.
+He looks annoyed.";
+    }
+];
+
+Room rivendell
+"Rivendell"
+with
+    n_to [;
+        hold_back_lunch();
+        if (player == parent(map)) {
+            print
+"Using the curious map that Gandalf gave you, you soon find your way to the
+pleasant lush of the woods.";
+            PlayerTo(woods);
+        } else {
+"You stagger off in the surrounding hills, but find nothing of interest.
+Disappointed you return back to Elrond's party";
+        }
+    ],
+    w_to [;
+        hold_back_lunch();
+        PlayerTo(clearing);
+    ],
+    ! ignore these referrals
+    name 'house' 'last',
+    description [;
+        print
+"This is Rivendell, the last homelike house.
+At least, that's the name of it.
+Paths lead off to the north and west.";
+        return move_thorin(self);
+    ],
+;!
+
+
+Room woods
+"Deep Forest"
+with
+    n_to rivendell,
+    e_to raft,
+    w_to foul_cave,
+    name 'deep' 'woods',
+    description [;
+        print
+"You are standing in the deep forest.
+Paths lead off in all directions but east, where a mighty river is
+floating by.
+You feel lost and hungry.";
+        return move_thorin(self);
+    ],
+;! 
+
+
+Object raft
+"Raft"
+has enterable static supporter
+with
+    w_to woods,
+    description
+"",
+    initial,
+    before [;
+        Go:
+! XXX Do we give a warning?
+            print
+"Not knowing what is about to happen, you fearlessly enter the raft.
+You follow the river downstream for a while, as you don't have any means
+of manoeuvering the little dingy.
+When hitting land, you are cold and starving.
+You soon find a trail leading to a little village.
+The natives feed you and treat you well, so you are soon healthy enough to
+go hunting on your own.
+On one of your trips up into the mountains, you are suddenly brought back
+to your original mission, as you step on a loose rock, which gives way.
+You slide down a long tunnel which has many bends and little light.
+Eventually you leave the tunnel, only to come into...^";
+            PlayerTo(den);
+    ],
+;!
+
+
+Room troll_cave
+"Troll's Cave"
+has ~light
+with
+    s_to clearing,
+    name 'doorway',
+    description [;
+        print
+"You are in a hardly even lit cavern with a doorway leading south.";
+        return move_thorin(self);
+    ],
+;!

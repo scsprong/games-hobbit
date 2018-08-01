@@ -1,0 +1,907 @@
+@echo off
+if "%3" == "the" ask %1 %2 %4
+if "%2" == "about" talkhelp %1 %3 
+talkhelp %1 %2
+@echo off
+if "%hbr%" == "clearing" goto clearing
+
+echo Try examining things!
+goto exit
+
+:clearing
+echo Trolls are not known to stand sunlight very well. It may be wise to wait a
+echo while before confronting them.
+goto exit
+
+:exit
+
+
+@echo off
+if "%1" == "the" cut %2
+if "%1" == "cigar" goto cutcigar
+if "%1" == "dragon" kill %1
+if "%1" == "thorin" kill %1
+if "%1" == "elrond" kill %1
+if "%1" == "thorin" kill %1
+if "%1" == "troll" kill %1
+if "%1" == "trolls" kill %1
+echo You can't cut that!
+goto exit
+
+:cutcigar
+if not "%hbr%" == "den" goto cantseecig
+if not "%hb6%" == "me" goto havntsword
+echo You run towards the mighty dragon and cut off his cigar. The dragon
+echo exclaims, "Hey, what are you doing!". You explain that the cigar will
+echo be easier to smoke now, and after some experimenting, Smaug agrees with you.
+echo He trades your sword for a treasure and offers you transport to Rivendell.
+set hb7=me
+set hbr=rivendell
+set hb6=den
+echo.
+pause
+look
+:cantseecig
+echo There are no cigars around.
+goto exit
+:havntsword
+echo You havn't got anything to cut with.
+goto exit
+
+:exit
+@echo off
+if "%1"=="torch" goto drop-torch
+if "%1"=="lunch" goto drop-lunch
+if "%1"=="map" goto drop-map
+if "%1"=="sword" goto drop-sword
+if "%1"=="treasure" goto drop-treasure
+if "%1" == "the" drop %2
+goto not-held
+
+:drop-torch
+if not "%hb1%"=="me" goto not-held
+set hb1=%hbr%
+goto dropped
+
+:drop-lunch
+if not "%hb2%"=="me" goto not-held
+set hb2=%hbr%
+goto dropped
+
+:drop-map
+if not "%hb3%"=="me" goto not-held
+set hb3=%hbr%
+goto dropped
+
+:drop-sword
+if not "%hb6%"=="me" goto not-held
+set hb6=%hbr%
+goto dropped
+
+:drop-treasure
+if not "%hb7%"=="me" goto not-held
+set hb7=%hbr%
+goto dropped
+
+:not-held
+echo You are not holding that.
+goto exit
+
+:dropped
+echo You drop the %1.
+
+:exit
+@go east
+@echo off
+if "%1" == "the" eat %2
+if "%1" == "lunch" goto eatlunch
+if "%1" == "" echo What do you want to eat?
+if not "%1" == "" echo You can't eat that!
+goto exit
+
+:eatlunch
+if not "%hb2%" == "me" goto donthave
+echo You feel much refreshed.
+set hb2=nil
+goto exit
+
+:donthave
+echo But you don't have any lunch!
+
+:exit
+@if "%1" == "the" go %2
+@go %1
+@echo off
+if "%1" == "" look
+if "%1" == "torch" goto torch
+if "%1" == "lunch" goto lunch
+if "%1" == "map" goto map
+if "%1" == "chest" goto chest
+if "%1" == "elrond" goto elrond
+if "%1" == "gandalf" goto gandalf
+if "%1" == "spell" goto spell
+if "%1" == "thorin" goto thorin
+if "%1" == "naked" goto woman
+if "%1" == "woman" goto woman
+if "%1" == "smaug" goto smaug
+if "%1" == "dragon" goto smaug
+if "%1" == "treasure" goto treasure
+if "%1" == "paintings" goto paintings
+if "%1" == "painting" goto paintings
+if "%1" == "cigar" goto cigar
+if "%1" == "the" examine %2
+echo There is nothing special about the %1.
+goto exit
+
+:torch
+if not "%hb1%" == "me" if not "%hb1%" == "%hbr%" goto cantsee
+echo It is currently providing light.
+goto exit
+
+:lunch
+if not "%hb2%" == "me" if not "%hb2%" == "%hbr%" goto cantsee
+echo It's edible.
+goto exit
+
+:map
+if "%hb3%" == "gandalf" if "%hbr%" == "home" goto ganhasmap
+if not "%hb3%" == "me" if not "%hb3%" == "%hbr%" goto cantsee
+echo The curious map must obviously have been drawn by hand, at great effort. 
+echo It shows the mysterious surroundings of Rivendell, home of the elves.
+goto exit
+:ganhasmap
+echo Gandalf has it. You should ask him about it. Maybe he doesn't need it anyway.
+goto exit
+
+:chest
+if not "%hbr%" == "home" goto cantsee
+echo It's a nice piece of wooden workmanship.
+if "%hb1%" == "chest" echo There's a burning torch inside it. You decide to pick it up.
+if "%hb1%" == "chest" set hb1=me
+goto exit
+
+:gandalf
+if not "%hbr%" == "home" goto gancantsee
+echo Gandalf, the old magician, is still working with his new spell.
+if "%hb3%" == "gandalf" echo He is carrying a map.
+goto exit
+:gancantsee
+echo Gandalf isn't here!
+goto exit
+
+:spell
+if not "%hbr%" == "home" goto cantsee
+echo It's a piece of beautiful yellowed paper, with magical symbols arranged
+echo in groups. Several symbols resemble Hobbits exploding.
+goto exit
+
+:elrond
+if not "%hbr%" == "rivendell" goto elrcantsee
+echo Elrond has turned pretty nasty lately. Better not mess with him, considering
+echo his plans to enslave all Hobbits. 
+goto exit
+:gancantsee
+echo Elrond isn't here!
+goto exit
+
+:thorin
+echo Thorin, your old friend, is no longer the proud dwarf he once was. All the
+echo drugs have turned him into a drooling good-for-nothing idiot. The only reason
+echo that he has come along is to get more treasures for drugs, as always.
+
+if "%hbr%" == "home" echo He doesn't seem too happy about leaving the house.
+if "%hbr%" == "rivendell" echo Thorin takes another beer from the fridge. Elrond slaps him.
+if "%hbr%" == "den" echo Thorin is negotiating with the dragon about taking some rare drugs home,
+if "%hbr%" == "den" echo provided that Smaug gets to keep your body.
+if "%hbr%" == "woods" echo Thorin says "We're lost! Abandon all hope. We'll never get out of here alive!".
+if "%hbr%" == "clearing" if "%hbs%" == "NO" echo Thorin participates in the chanting.
+if "%hbr%" == "clearing" if "%hbs%" == "YES" echo Thorin is talking to the trolls. He doesn't notice that they are dead. 
+if "%hbr%" == "cave" echo Thorin is writing a song. I shall call it "Let's roll another one", he remarks.
+goto exit
+
+:woman
+if not "%hbr%" == "foul" goto cantseeher
+echo She looks cold and tired, and pretty far from sensual. As you peek at her,
+echo Thorin remarks that she's the only dwarf woman alive at the moment. He seems
+echo to find her attractive.
+goto exit
+
+:smaug
+if not "%hbr%" == "den" goto smacantsee
+echo Smaug's red dragon body is filling the eastern part of the cave. As he can't
+echo get out of the cave anymore, he seems to have settled with just lying here,
+echo eating any adventurers that drop by. Every now and then he enjoys a big
+echo cigar, but he obviously doesn't know quite how to do it right. The cigar in
+echo his mouth hasn't been cut properly. Smaug coughs, but luckily you're out of
+echo the deadly range.
+goto exit
+:smacantsee
+echo Smaug is not around, as far as I can see.
+goto exit
+
+:treasure
+if not "%hb7%" == "me" if not "%hb7%" == "%hbr%" goto cantsee
+echo It is just the kind of treasure you'd expect to find in a dragon's den. It does
+echo seem mighty valuable.
+goto exit
+
+:paintings
+if not "%hbr%" == "den" goto cantsee
+echo Among the paintings you recognize works of Picasso, da Vinci and Rembrandt. 
+goto exit
+
+:cigar
+if not "%hbr%" == "den" goto cantsee
+echo The cigar doesn't seem to be properly cut.
+goto exit
+
+:cantseeher
+echo She is nowhere to be seen.
+goto exit
+
+:cantsee
+echo It is nowhere to be seen.
+
+:exit
+@take %1 %2 %3
+@echo off
+
+if "%hbr%" == "woods" goto woods
+if "%hbr%" == "foul" goto foul
+if "%hbr%" == "cave" goto cavern
+if "%hbr%" == "clearing" goto clearing
+if "%hbr%" == "home" goto home
+if "%hbr%" == "rivendell" goto rivendell
+if "%hbr%" == "den" goto den
+
+goto error
+
+
+:woods
+if "%1" == "raft" if "%hb5%" == "woods" goto rwoods
+if "%1" == "south" goto gowoods
+if "%1" == "west" goto gofoul
+if "%1" == "north" goto gorivendell
+goto fail
+:rwoods
+echo Not knowing what is about to happen, you fearlessly enter the raft. You follow
+echo the river downstream for a while, as you don't have any means of manouvering
+echo the little dingy. When hitting land, you are cold and starving. You soon find
+echo a trail leading to a little village. The natives feed you and treat you well,
+echo so you are soon healthy enough to go hunting on your own. On one of your trips
+echo up into the mountains, you are suddenly brought back to your original mission,
+echo as you step on a loose rock, which gives way. You slide down a long tunnel
+echo which has many bends and little light. Eventually you leave the tunnel, only
+echo to come into...
+set hb5=nil
+set hbr=den
+echo.
+pause
+call look
+echo Thorin, whom you haven't seen since you were in the forest together, enters
+echo from a side door, singing about peace. He greets you with a laugh.
+goto exit
+
+:foul
+if not "%1" == "east" goto fail
+set hbr=woods
+look
+
+:cavern
+if "%1" == "south" goto goclearing
+goto fail
+
+:clearing
+if "%1" == "east" goto gorivendell
+if "%1" == "north" goto nclearing
+if "%1" == "west" goto gohome
+goto fail
+:nclearing
+if "%hbs%" == "YES" goto gocave
+echo The trolls won't let you.
+goto exit
+
+:home
+if "%1" == "east" goto goclearing
+goto fail
+
+:rivendell
+if "%1" == "north" goto nrivendell
+if "%1" == "west" goto wrivendell
+goto fail
+:wrivendell
+if not "%hb2%"=="me" goto goclearing
+echo Just as you leave, Elrond grabs your lunch. He looks annoyed.
+set hb2=rivendell
+goto goclearing
+:nrivendell
+if not "%hb2%"=="me" goto nrivcont
+echo Just as you leave, Elrond grabs your lunch. He looks annoyed.
+set hb2=rivendell
+:nrivcont
+if "%hb3%" == "me" goto gowodfromriv
+echo You stagger off into the surrounding hills, but find nothing of interest.
+echo Disappointed you return back to Elrond's party.
+goto exit
+:gowodfromriv
+echo Using the curious map that Gandalf gave you, you soon find your way to the
+echo pleasant lush of the woods.
+set hbr=woods
+look
+
+:den
+goto fail
+
+:gohome
+set hbr=home
+if not "%hb7%"=="me" goto success
+echo You go west.
+call look
+echo.
+echo As you enter your home again, Gandalf leaps to his feet. He comes forward, as
+echo if to greet and congratulate you, but instead he asks, "Did you bring any
+echo tobacco?". You decide to do what you should have done a long time ago. You
+echo show the old wizard to the door, and kindly ask him to leave. Thorin follows
+echo Gandalf out through the door.
+echo.
+echo Without any wizards or dwarves pestering you all the time, your life gets very
+echo pleasant, and with the treasure it stays that way. You have won!!!
+echo.
+pause
+restart
+
+:goclearing
+set hbr=clearing
+goto success
+:gocave
+set hbr=cave
+goto success
+:gorivendell
+set hbr=rivendell
+goto success
+:gowoods
+set hbr=woods
+goto success
+:gofoul
+set hbr=foul
+goto success
+:goden
+set hbr=den
+goto success
+
+
+:error
+echo Error: Undefined room!
+goto exit
+
+:fail
+echo You can't go %1.
+goto exit
+
+:success
+echo You walk %1.
+call look
+if "%1" == "north" echo Thorin is already here.
+if "%1" == "south" echo Thorin comes running after you.
+if "%1" == "east" echo Thorin enters from the west.
+if "%1" == "west" echo Thorin follows your trail.
+
+:exit
+@clue %1 %2
+@inventor
+
+@echo off
+echo You are carrying:
+if "%hb1%"=="me" echo A Torch
+if "%hb2%"=="me" echo Some Lunch
+if "%hb3%"=="me" echo A Curious Map
+if "%hb6%"=="me" echo A Sword
+if "%hb7%"=="me" echo A Treasure
+@echo off
+echo You are carrying:
+if "%hb1%"=="me" echo A Torch
+if "%hb2%"=="me" echo Some Lunch
+if "%hb3%"=="me" echo A Curious Map
+if "%hb6%"=="me" echo A Sword
+if "%hb7%"=="me" echo A Treasure
+@echo off
+echo Violence is not very likely to solve your problems. Better stay calm.
+
+@look
+
+@echo off
+echo.
+if "%hbr%" == "woods" goto woods
+if "%hbr%" == "foul" goto foul
+if "%hbr%" == "cave" goto cavern
+if "%hbr%" == "clearing" goto clearing
+if "%hbr%" == "home" goto home
+if "%hbr%" == "rivendell" goto rivendell
+if "%hbr%" == "den" goto den
+
+goto error
+
+:woods
+echo Deep Forest
+echo You are standing in the deep forest. Paths lead off in all directions but east,
+echo where a mighty river is floating by. You feel lost and hungry.
+echo Thorin sits down and starts singing about drugs. He offers you a joint.
+goto exit
+
+:foul
+echo Foul Smelling Cave
+echo You are in a vast cave, with a foul smell filling your nostrils. Light is
+echo coming in through the wide entrance to the east, and it's just enough for you
+echo to make out the walls of the cave.
+goto exit
+
+:cavern
+echo Trolls' Cave
+if "%hb1%"=="cavern" goto cavelight
+if "%hb1%"=="me" goto cavelight
+echo It's dark. You can't see anything.
+goto lastexit
+:cavelight
+echo You are in a hardly even lit cavern with a doorway leading south.
+echo Thorin is mumbling to himself and fails to notice your presence.
+goto exit
+
+:clearing
+echo Trolls' Clearing
+echo You are standing in a vast clearing, with paths leading off to the east and 
+echo west. A yellow brick road leads north. Trolls are standing all around you,
+echo fiercely watching every move of your limbs.
+if "%hbs%"=="YES" echo The trolls seem to be stoned. They probably don't like the sunlight.
+if not "%hbs%"=="YES" echo The trolls are chanting ancient rhymes. They tend to do that just before dawn.
+goto exit
+
+:home
+echo Tunnel Like Hall
+echo You are in your comfortable tunnel like hall. Infact, it's just a dirty hole in
+echo the ground, but to you it's home. Gandalf is working on a nasty spell. There
+echo is a round, green door set in the eastern wall.
+goto exit
+
+:rivendell
+echo Rivendell
+echo This is Rivendell, the last homelike house. At least, that's the name of it.
+echo Elrond is sitting at a round table together with his generals, discussing his 
+echo plans for a coming conquest and enslavement of the Hobbits. Paths lead off to
+echo the north and west.
+echo Elrond hesitatingly offers you some food. He gives your fairly thick legs a
+echo greedy look. He drools.
+echo Thorin announces: "If you're attacking the Hobbits, count me in!"
+set hb2=me
+goto exit
+
+:den
+echo Smaug's Den
+echo You are in a great cave. Gold and jewelry cover the floor. Precious paintings
+echo are hanging on all the walls. Smaug is lying on a big heap of silver bars,
+echo smoking a huge cigar. He looks at you and yawns loudly. 
+goto exit
+
+:error
+echo Error: Undefined room!
+
+:exit
+echo You can see:
+if "%hb1%"=="%hbr%" echo A Torch
+if "%hb2%"=="%hbr%" echo Some Lunch
+if "%hb3%"=="%hbr%" echo A Curious Map
+if "%hbr%"=="home" echo A Wooden Chest
+if "%hbr%"=="foul" echo A Naked Dwarf Woman
+if "%hb5%"=="%hbr%" echo A Raft
+if "%hb6%"=="%hbr%" echo A Sword
+if "%hb7%"=="%hbr%" echo A Treasure
+echo Thorin, the dwarf.
+:lastexit
+@restore %1 %2 %3 %4 %5@go north
+@restart
+                                                         Thursday 27 Dec 2001
+                         
+                         
+             Hobbit - The True Story - redux, Director's Cut
+
+                by Fredrik Ramsberg and Johan Berntsson
+
+
+This is a small interactive adventure game for PC's using MS-DOS 5.0 or
+higher, or Microsoft Windows of any sorts. The game was in fact, in its
+entirety, written in MS-DOS 5 batch files, in 1993. After unpacking the game
+in a directory of its own, this is what you have to do to be able to play it:
+
+               * Include the name of the directory in the PATH variable
+                 declaration in your AUTOEXEC.BAT. After rebooting the
+                 machine, the game should always be available for play.
+
+               * Type RESTART at a DOS prompt.
+
+Please note: You can interrupt gameplay at any time, to do something else in
+DOS -- As long as you don't turn off or reset the computer, the game will
+always be ready for continuation. If you have trouble running the game, make
+sure that you have enough memory space reserved for environment variables.
+The space reserved can be extended using the MS-DOS command "command /e:nnnnn".
+
+If you want to avoid the hassle of rebooting your machine, you can still play
+the game by simply getting a DOS prompt, going to the directory where you
+unpacked it and typing RESTART. However, that means you won't be able to
+move to different directories while playing.
+
+
+
+                                Story
+
+This game is about what really happened to Bilbo Baggins on his famous
+adventure. The story, in somewhat corrupt versions, has been told in a book -
+The Hobbit by JRR Tolkien, and several computer games, among them Hobbit.
+You play the part of Bilbo, and your goal is to journey to Smaug, the great
+red dragon in the land beyond the river, and return with treasure. For an
+assistant you have Thorin the dwarf and Gandalf the powerful wizard. They
+will do everything within their power to guide you and to help you. Well,
+almost everything, as long as they don't have to get into any trouble
+themselves. Or get wet, for that matter. Or cold.
+
+Sample sentences that the parser will recognize:
+(Note that everything must be typed in lower case.)
+
+>take chest
+>show gandalf chest
+>show the chest to gandalf
+>drop the chest
+>inventory
+>i  (Short for inventory)
+>get the chest
+>ask gandalf about the spell
+>talk to thorin about chest
+>examine chest
+>x chest (Short for examine chest)
+>hint
+>clue
+>look
+>l (Short for look)
+>go east
+>e (Short for go east)
+>enter the chest
+>wait
+>save jake1
+>restore jake1
+>restart
+>quit
+                    The redux, Director's Cut version
+                     
+The new version restores a lost scene which had to be cut in order to get
+a PG rating. This rare footage includes some nudity, but this was considered
+to be rather mild by today's standards. The improved version also includes
+two new commands, "save" and "restore", along with some added dialogue.
+Compatibility issues have also been addressed, and the game should now
+perform well under Windows 95, 98, ME, NT and 2000, quite possibly even XP,
+for all we know.
+
+                                General info
+
+This game is a shareware product. You are absolutely free to distribute it
+to anyone, as long as you don't take a profit from it. However, anyone who
+enjoys it and decides to keep it should pay a small fee to the authors. This
+fee will encourage them to write more shareware programs in the future.
+Also, paying the fee is helping to establish this form of distribution, as
+other programmers may start using it if it works properly.
+
+The shareware fee for this program is simply the amount of money you think
+it's worth. This may be sent in any way you like to the address below. Thank
+you!
+
+                           Mr. Fredrik Ramsberg
+                               Sedelv 20
+                             S-129 32 Hagersten
+                               SWEDEN
+
+If you have any questions or comments, feel free to contact me using the
+above address, or the e-mail address below:
+
+                               f.r@mail.com
+
+Thank you for playing this game!
+@echo off
+rem ***  The first known attempt at MS-DOS adventuring    ***
+rem *** Launched by Johbe and Frera on 30:th of March '93 ***
+rem ***             Updated in December 2001              ***
+
+set hbr=home
+set hb1=chest
+set hb2=rivendell
+set hb3=gandalf
+set hb5=woods
+set hb6=cave
+set hb7=den
+set hbs=NO
+
+echo Hobbit - The True Story - redux, Director's Cut.
+echo.
+echo An MS-DOS adventure released by Milbus Software (tm) 1993.
+echo redux, Director's Cut released by Milbus Software (tm) 2001.
+echo.
+call look
+
+@echo off
+if "%1" == "" goto noname
+if not exist "HS%1.BAT" goto notfound
+
+call HS%1.BAT
+echo Game restored.
+Look
+
+goto exit
+
+:noname
+echo You must supply a save-name with RESTORE. "RESTORE xyz" will restore a saved
+echo game from a save-file called "HSxyz.BAT".
+goto exit
+
+:notfound
+echo Error: No file called "HS%1.BAT" was found.
+
+:exit@go south
+
+@echo off
+rem show (the) map to elrond
+rem show elrond (the) map
+
+if "%1" == "the" show %2 %3 %4
+if "%2" == "the" show %1 %3
+
+if "%2" == "to" talkhelp %3 %1
+talkhelp %1 %2
+@echo off
+if "%1" == "" goto noname
+if exist "HS%1.BAT" goto found
+
+echo @echo off> HS%1.BAT
+echo SET hb1=%hb1%>> HS%1.BAT
+echo SET hb2=%hb2%>> HS%1.BAT
+echo SET hb3=%hb3%>> HS%1.BAT
+echo SET hb5=%hb5%>> HS%1.BAT
+echo SET hb6=%hb6%>> HS%1.BAT
+echo SET hb7=%hb7%>> HS%1.BAT
+echo SET hbr=%hbr%>> HS%1.BAT
+echo SET hbs=%hbs%>> HS%1.BAT
+echo Game saved.
+goto exit
+
+:noname
+echo You must supply a save-name with SAVE. "SAVE xyz" will create a file called
+echo "HSxyz.BAT". The filename should be at least 1 and at most 5 characters long.
+goto exit
+
+:found
+echo Error: A file called "HS%1.BAT" already exists.
+
+:exit@echo off
+if "%1"=="torch" goto take-torch
+if "%1"=="lunch" goto take-lunch
+if "%1"=="map" goto take-map
+if "%1"=="chest" goto take-chest
+if "%1"=="raft" goto take-raft
+if "%1"=="sword" goto take-sword
+if "%1"=="treasure" goto take-treasure
+if "%1" == "the" take %2
+goto cant-take
+
+:take-torch
+if "%hb1%"=="me" goto already-got
+if not "%hb1%"=="%hbr%" goto cant-see
+set hb1=me
+goto taken
+
+:take-lunch
+if "%hb2%"=="me" goto already-got 
+if not "%hb2%"=="%hbr%" goto cant-see
+set hb2=me
+goto taken
+
+:take-map
+if "%hb3%"=="me" goto already-got
+if not "%hb3%"=="%hbr%" goto cant-see
+set hb3=me
+goto taken
+
+:take-chest
+if not "%hbr%" == "home" goto cant-see
+goto cant-take
+
+:take-raft
+if not "%hb5%"=="%hbr%" goto cant-see
+goto cant-take
+
+:take-sword
+if "%hb6%"=="me" goto already-got
+if not "%hb6%"=="%hbr%" goto cant-see
+set hb6=me
+goto taken
+
+:take-treasure
+if "%hb7%"=="me" goto already-got
+if not "%hb7%"=="%hbr%" goto cant-see
+set hb7=me
+goto taken
+
+:already-got
+echo You are already carrying that.
+goto exit
+
+:cant-take
+echo You can't take that.
+goto exit
+
+:cant-see
+echo You can't see it here.
+goto exit
+
+:taken
+echo You take the %1.
+
+:exit
+@echo off
+rem talk to gandalf about (the) map
+rem talk gandalf (the) map
+rem talk to gandalf 
+
+if "%4" == "the" talk %1 %2 %3 %5 %6
+if "%2" == "the" talk %1 %3 %4 %5 %6
+
+if not "%5" == "" goto toomany
+if "%1" == "to" if "%3" == "about" talkhelp %2 %4
+if "%1" == "to" talkhelp %2
+if "%3" == "" talkhelp %1 %2
+
+echo I don't understand that sentence.
+goto exit
+
+:toomany
+echo There are too many words in that sentence.
+
+:exit
+@echo off
+if "%1" == "gandalf" goto talkgandalf
+if "%1" == "elrond" goto talkelrond
+if "%1" == "thorin" goto talkthorin
+if "%1" == "naked" goto talkwoman
+if "%1" == "woman" goto talkwoman
+
+goto notalk
+
+:talkgandalf
+if not "%hbr%"=="home" goto cantsee
+if "%2" == "map" goto ganmap
+if "%2" == "spell" goto ganspell
+if "%2" == "hoboff" goto ganhoboff
+if "%2" == "thorin" goto ganthorin
+echo "Yes, that's probably so", he says.
+goto exit
+:ganmap
+if not "%hb3%"=="gandalf" goto gan2map
+echo "Oh, that map. There is absolutely nothing special about it at all. I guess
+echo you could have it, if you want it.", Gandalf declares and hands you the map. 
+set hb3=me
+goto exit
+:gan2map
+echo Gandalf yells, "I already gave it to you, didn't I!!!".
+goto exit
+:ganspell
+echo "This will be a great spell. I shall name it 'HOBOFF', no doubt.", Gandalf
+echo chuckles.
+goto exit
+:ganhoboff
+echo Gandalf gives you a mean smile, showing all his teeth. "Any Hobbit of my
+echo choice will be turned into a pile of dirt.", he laughs, "Only a few minor
+echo adjustments left, and it will produce a great fertilizer.". His eyes open
+echo wide as he reaches the end of the sentence. He then looks at you for a good
+echo fifteen seconds before he slowly turns away.
+goto exit
+:ganthorin
+echo "It's a sordid story, really. He hasn't been himself in a long time. Or perhaps
+echo he wasn't himself before, and now he is. Or maybe we haven't even seen his real
+echo self. Let's talk about something else, shall we?" says Gandalf and looks tired.
+goto exit
+
+:talkelrond
+if not "%hbr%"=="rivendell" goto cantsee
+if "%2" == "map" goto elmap
+if "%2" == "plans" goto elplans
+echo Elrond laughs at your silly question. He pats your head.
+goto exit
+:elmap
+if not "%hb3%" == "rivendell" if not "%hb3%" == "me" goto elnomap
+echo "That's a fine map you've got there. We wouldn't want anything to HAPPEN to it,
+echo now would we?", Elrond hisses. He continues; "Whatever you do, don't show it to
+echo that crazy dwarf!".
+goto exit
+:elnomap
+echo "What map are you talking about, you little prat? You must be delirious!",
+echo Elrond snarls. He slaps you in the face.
+goto exit
+:elplans
+echo "They are top secret. If you reveal anything you're dead meat, pipsqueak!",
+echo Elrond whispers. He look as though he meant it.
+goto exit
+
+:talkthorin
+if "%2" == "map" goto thormap
+if "%2" == "naked" goto thorwoman
+if "%2" == "woman" goto thorwoman
+if "%hbr%" == "clearing" echo Thorin gets a serious look on his face. "Don't push your luck, kid!", he says.
+if "%hbr%" == "woods" echo "Have you ever tried picking up your teeth with broken fingers?",Thorin replies.
+if "%hbr%" == "cave" echo "I'm tired of killing for money. Let's go home!", Thorin sighs.
+if "%hbr%" == "rivendell" echo Thorin is too absorbed by Elronds plans to pay attention.
+if "%hbr%" == "den" echo "Hell, this is a fortune!", Thorin states as he walks around the cave.
+if "%hbr%" == "home" echo "Did your mom ever talk to you about death?", Thorin asks you.
+goto exit
+:thormap
+if not "%hb3%" == "%hbr%" if not "%hb3%" == "me" goto thornomap
+echo Thorin takes a quick look at the map. His eyes widen in rage as he reaches for
+echo his battle axe. "It was you all the time, wasn't it?!", he cries out. With one
+echo well placed blow he cleaves your skull. All is dark...
+echo.
+pause
+restart
+:thornomap
+echo Thorin eyes you suspiciously. "Don't try any tricks, boy. We both know that
+echo there is no map here, now don't we?", he asks. He doesn't seem too sure about
+echo it himself.
+goto exit
+:thorwoman
+if not "%hbr%" == "foul" goto thornowoman
+echo Thorin looks embarrased. "I'd rather not talk about it. She's...She's...Never
+echo mind, it's none of your business anyway," he says. He briefly touches the
+echo handle of his axe, as if to make it clear that you had better leave it at that.
+goto exit
+:thornowoamn
+echo Thorin glances around. "Whoa, where is she? Where's this woman you're talking
+echo about?" he says. You are forced to disappoint him.
+goto exit
+
+
+:talkwoman
+if not "%hbr%"=="foul" goto cantseewom
+if "%2" == "map" goto womap
+if "%2" == "thorin" goto wothorin
+echo She shudders and looks nervous.
+goto exit
+:womap
+if not "%hb3%" == "foul" if not "%hb3%" == "me" goto wonomap
+echo She looks at your map and laughs heartily. You seem to have made her day.
+goto exit
+:wonomap
+echo She doesn't seem to understand what you are referring to.
+goto exit
+:wothorin
+echo She says something that sounds like an insult. Since the two of you don't seem
+echo to have any language in common, you can't tell for sure though. She pats
+echo Thorin's head. Thorin slaps you.
+goto exit
+
+:cantsee
+echo You can't see him here.
+goto exit
+
+:cantseewom
+echo You can't see her here.
+goto exit
+
+:notalk
+echo Action speaks louder than words!
+
+:exit
+@go west
+@echo off
+
+if "%hbr%" == "clearing" if not "%hbs%" == "YES" goto wait-clearing
+echo Time passes...
+goto exit
+
+:wait-clearing
+echo A new day dawns. The trolls seem rather surprised, and rigid with fear.
+set hbs=YES
+
+:exit
+@examine %1 %2
